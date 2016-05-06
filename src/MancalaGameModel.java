@@ -9,9 +9,13 @@ public class MancalaGameModel {
 	private int stones;
 	private ArrayList<View> views;
 	private boolean eMove;
+	private int turns;
+	private int blockUndo;
+	private int count;
 
 	public MancalaGameModel(int n)
 	{
+		turns=-1;
 		eMove = false;
 		stones = n;
 		pits = new PitsModel(n);
@@ -19,6 +23,8 @@ public class MancalaGameModel {
 		savedPits = new PitsModel(n);
 		previousExtraMovement = new boolean[] {false, false};
 		views = new ArrayList<View>();
+		blockUndo = 0;
+		count = 0;
 	}
 
 	public int getStones()
@@ -33,6 +39,7 @@ public class MancalaGameModel {
 	public void makeMovement(int c)
 	{
 
+		turns++;
 		int player = 0;
 		if (0<=c && c<=5)
 			player = 1;
@@ -40,6 +47,9 @@ public class MancalaGameModel {
 			player = 2;
 		pits.setPlayer(player);
 		saveMovement(savedPits, pits);
+		System.out.println("Saved player: " + savedPits.getPlayer());
+		if(turns==0)
+			savedPits.setPlayer(0);
 		pits.setExtraMove(false);
 		int temp = pits.getPits(c);
 		pits.setPits(c, 0);
@@ -61,7 +71,7 @@ public class MancalaGameModel {
 				temp--;
 				if (temp==0 && player==2)
 					setExtraMovement(true);
-				
+
 			}
 
 			if (temp>0) 
@@ -96,6 +106,7 @@ public class MancalaGameModel {
 		recordExtraMovement();
 		eMove = getExtraMovement();
 		update();
+
 	}
 
 	public void recordExtraMovement()
@@ -195,15 +206,32 @@ public class MancalaGameModel {
 		return winner;
 	}
 
-	public boolean undo()
+	public void undo()
 	{
+		if (blockUndo==turns){
+			count++;
+		}
+		else
+		{
+			blockUndo = turns;
+			count = 0;
+		}
+		if (count<3){
+			turns--;
+			saveMovement(pits, savedPits);
 
-		saveMovement(pits, savedPits);
 
-		pits.setExtraMove(previousExtraMovement[0]); 
-		previousExtraMovement[1] = previousExtraMovement[0];
-		previousExtraMovement[0] = false;
-		return true;
+			System.out.println("Player: "+pits.getPlayer());
+			pits.setExtraMove(previousExtraMovement[0]); 
+			previousExtraMovement[1] = previousExtraMovement[0];
+			previousExtraMovement[0] = false;
+			eMove = getExtraMovement();
+			if(pits.getPlayer()==1&&!eMove)
+				pits.setPlayer(2);
+			else if (pits.getPlayer()==2&&!eMove)
+				pits.setPlayer(1);
+			update();
+		}
 	}
 
 	public void saveMovement(PitsModel p, PitsModel s)
@@ -224,7 +252,7 @@ public class MancalaGameModel {
 
 	public int nextPlayer()
 	{
-		
+
 		if (pits.getPlayer()==0)
 			return 1;
 		if(pits.getPlayer()==1&&!eMove)
@@ -235,15 +263,15 @@ public class MancalaGameModel {
 			return 1;
 		else if (pits.getPlayer()==2&&eMove)
 			return 2;
-		
+
 		return 0;
-		
+
 	}
 	public void addView(View v)
 	{
 		views.add(v);
 	}
-	
+
 	public void update()
 	{
 		for (int i=0; i<12;i++)
@@ -261,6 +289,6 @@ public class MancalaGameModel {
 	{
 		return pits.getSecondStore();
 	}
-	
+
 
 }

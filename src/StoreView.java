@@ -11,6 +11,7 @@ public class StoreView extends JComponent implements View{
 	private int yPos;
 	private int index;
 	private int stones;
+	private Style style;
 	private MancalaGameModel model;
 	
 	public StoreView(MancalaGameModel m)
@@ -21,6 +22,10 @@ public class StoreView extends JComponent implements View{
 		stones = 0;
 	}
 	
+	public void setStyle(Style newStyle)
+	{
+		style = newStyle;
+	}
 	public void setXpos(int xP)
 	{
 		xPos = xP;
@@ -57,8 +62,8 @@ public class StoreView extends JComponent implements View{
 	public void paintComponent(Graphics g)
 	{
 		 super.paintComponent(g);
-		
-		Graphics2D g2 = (Graphics2D) g;
+		style.paintMancala(g, xPos, yPos, stones);
+		/*Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.LIGHT_GRAY);
 		g2.fill(new Ellipse2D.Double(0,yPos/8, xPos, yPos));
 		g2.setColor(Color.BLUE);
@@ -120,7 +125,7 @@ public class StoreView extends JComponent implements View{
 			g2.fill(new Ellipse2D.Double(0,yPos*9/10, 12, 12));
 			g2.translate(xPos/7, 0);
 			
-		}
+		}*/
 	}
 
 }

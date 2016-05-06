@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class MancalaGameModel {
+public class MancalaGame {
 
 	PitsModel pits;
 	private boolean undoMove;
@@ -10,7 +10,7 @@ public class MancalaGameModel {
 	private ArrayList<View> views;
 	private boolean eMove;
 
-	public MancalaGameModel(int n)
+	public MancalaGame(int n)
 	{
 		eMove = false;
 		stones = n;
@@ -177,14 +177,12 @@ public class MancalaGameModel {
 			for (int i=0; i<6; i++)
 			{
 				pits.addFirstStore(pits.getPits(i));
-				pits.setPits(i, 0);
 			}
 			for (int i=6; i<12; i++)
 			{
 				pits.addSecondStore(pits.getPits(i));
-				pits.setPits(i, 0);
 			}
-			update();
+
 			if (pits.getFirstStore()>pits.getSecondStore())
 				winner = 1;
 			else
@@ -246,12 +244,10 @@ public class MancalaGameModel {
 	
 	public void update()
 	{
-		for (int i=0; i<12;i++)
+		for (int i=0; i<views.size();i++)
 		{
 			views.get(i).update(pits.getPits(i));
 		}
-		views.get(12).update(pits.getFirstStore());
-		views.get(13).update(pits.getSecondStore());
 	}
 	public int getFirstStore()
 	{

@@ -14,6 +14,7 @@ public class PitsView extends JComponent implements View{
 		private int yPos;
 		private int index;
 		private MancalaGameModel model;
+		private Style style;
 		public PitsView (int p, MancalaGameModel m){
 			super();
 			stones = p;
@@ -41,7 +42,7 @@ public class PitsView extends JComponent implements View{
 		        		  int firstStore = model.getFirstStore();
 		        		  int secondStore = model.getSecondStore();
 		        		  JOptionPane pane = new JOptionPane();
-		        		  int exit = pane.showConfirmDialog(null, "The winner is: "+winner+"\nPlayer 1 has: "+firstStore+"\nPlayer 2 has: "+secondStore, "Game End!", JOptionPane.CLOSED_OPTION);
+		        		  int exit = pane.showConfirmDialog(null, "The winner is: "+((winner==1)?"A":"B")+"\nPlayer A has: "+firstStore+"\nPlayer B has: "+secondStore, "Game End!", JOptionPane.CLOSED_OPTION);
 		        		 
 		        		  
 		        		  if (exit != 10000)
@@ -52,6 +53,11 @@ public class PitsView extends JComponent implements View{
 		        	  }
 		          } 
 		        }); 
+		}
+		
+		public void setStyle(Style newStyle)
+		{
+			style = newStyle;
 		}
 		public void update(int s)
 		{
@@ -104,9 +110,9 @@ public class PitsView extends JComponent implements View{
 		@Override
 		public void paintComponent(Graphics g)
 		{
-			 super.paintComponent(g);
-			
-			Graphics2D g2 = (Graphics2D) g;
+			super.paintComponent(g);
+			style.paintPits(g, xPos, yPos, stones);
+			/*Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(Color.RED);
 			g2.fill(new Ellipse2D.Double(0,0, xPos, yPos));
 			g2.setColor(Color.BLUE);
@@ -134,7 +140,7 @@ public class PitsView extends JComponent implements View{
 					g2.translate(xPos/5, 0);
 					g2.fill(new Ellipse2D.Double(0,yPos*4/5, 12, 12));
 				}
-		
+			*/
 			//g2.translate(10, 0);
 			//g2.draw(new Ellipse2D.Double(0,10, 10, 10));
 			//g2.translate(10, 0);

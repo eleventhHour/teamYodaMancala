@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 
 public class MancalaController {
@@ -34,7 +35,8 @@ public class MancalaController {
             public void actionPerformed(ActionEvent event){
                 int stones = findNumStones();
                 MancalaGameModel model = new MancalaGameModel(stones);
-                testBoard test = new testBoard(model);
+                
+                testBoard test = new testBoard(model, new firstStyle());
                 frame.dispose();
             }
         });
@@ -46,7 +48,7 @@ public class MancalaController {
             public void actionPerformed(ActionEvent event){
                 int stones = findNumStones();
                 MancalaGameModel model = new MancalaGameModel(stones);
-                testBoard test = new testBoard(model);
+                testBoard test = new testBoard(model, new secondStyle());
                 frame.dispose();
             }
         });

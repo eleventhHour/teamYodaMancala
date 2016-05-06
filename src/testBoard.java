@@ -21,12 +21,12 @@ public class testBoard extends JFrame{
 		final JPanel leftPanel = new JPanel();
 		final JPanel rightPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
-		JLabel topLabel = new JLabel("PLAYER B");
-		JTextArea StoreA = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \nA");
-		JTextArea StoreB = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \nB");
+		JLabel topLabel = new JLabel("PLAYER 2");
+		JTextArea StoreA = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \n1");
+		JTextArea StoreB = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \n2");
 		topPanel.add(topLabel);
 		topLabel.setFont(new Font("Courier New", Font.BOLD, 20));
-		JLabel bottomLabel = new JLabel("PLAYER A");
+		JLabel bottomLabel = new JLabel("PLAYER 1");
 		bottomPanel.add(bottomLabel);
 		bottomLabel.setFont(new Font("Courier New", Font.BOLD, 20));
 		JButton undoButton = new JButton("Undo");

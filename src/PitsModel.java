@@ -6,6 +6,11 @@ public class PitsModel {
 	int secondStore;
 	int player;
 	boolean move;
+
+    /**
+     * Constructs
+     * @param stones the number of stones to put in each pit
+     */
 	public PitsModel(int stones)
 	{
 		pits = new int[12];

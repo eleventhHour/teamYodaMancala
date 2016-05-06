@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -20,26 +22,43 @@ public class testBoard extends JFrame{
 		final JPanel rightPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
 		JLabel topLabel = new JLabel("PLAYER B");
+		JTextArea StoreA = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \nA");
+		JTextArea StoreB = new JTextArea("M\nA\nN\nC\nA\nL\nA\n \nB");
 		topPanel.add(topLabel);
 		topLabel.setFont(new Font("Courier New", Font.BOLD, 20));
 		JLabel bottomLabel = new JLabel("PLAYER A");
 		bottomPanel.add(bottomLabel);
 		bottomLabel.setFont(new Font("Courier New", Font.BOLD, 20));
+		JButton undoButton = new JButton("Undo");
+		bottomPanel.add(undoButton);
 		
-		setSize(2000,600);
+		
+		undoButton.addActionListener(new ActionListener()
+		{
+			  public void actionPerformed(ActionEvent e)
+			  {
+			    model.undo();
+			  }
+			});
+		
+		
+		setSize(1910,650);
 		final ArrayList<PitsView> pitView= new ArrayList<PitsView>();
 		final StoreView firstStore = new StoreView(model);
+		StoreA.setEditable(false);
+		StoreA.setFont(new Font("monospaced", Font.BOLD, 20));
+		StoreB.setEditable(false);
+		StoreB.setFont(new Font("monospaced", Font.BOLD, 20));
+		leftPanel.add(StoreB);
 		rightPanel.add(firstStore);
 		final StoreView secondStore = new StoreView(model);
 		leftPanel.add(secondStore);
-		
+		rightPanel.add(StoreA);
 		for (int i=0; i<12;i++)
 		{
 			PitsView p = new PitsView(model.getStones(), model);
 			p.setOpaque(true);
 			p.setIndex(i);
-			p.setXpos(30*i);
-			p.setYpos(40*i);
 			p.validate();
 			p.repaint();
 			pitView.add(p);
@@ -62,7 +81,6 @@ public class testBoard extends JFrame{
         		for (int i=0; i<12;i++)
         		{
         			int x = MiddlePanel.getWidth()/6-10;
-        			System.out.println(x);
             		int y = MiddlePanel.getHeight()/2-5;
             		
         			pitView.get(i).setYpos(y);
@@ -73,7 +91,6 @@ public class testBoard extends JFrame{
         		
         		int leftX = MiddlePanel.getWidth()/4;
         		int leftY = MiddlePanel.getHeight()/10*7;
-        		System.out.println("Left X is: "+leftX);
         		secondStore.setXpos(leftX);
         		secondStore.setYpos(leftY);
         		
@@ -82,7 +99,8 @@ public class testBoard extends JFrame{
         		firstStore.setXpos(rightX);
         		firstStore.setYpos(rightY);
         		
-        		
+        		secondStore.repaint();
+        		firstStore.repaint();
         
             }
         });

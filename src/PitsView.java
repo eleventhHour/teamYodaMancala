@@ -6,148 +6,112 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.*;
 
 public class PitsView extends JComponent implements View{
+
+	private int stones; //indicates how many stones in the pit
+	private int xPos;	//x position, it relatives to the panel
+	private int yPos;	//y position, it relatives to the panel
+	private int index; //indicates the index of pits, such as pit A1, pit A2....
+	private MancalaGameModel model; //model
+	private Style style;
+	public PitsView (int p, MancalaGameModel m){
+		super();
+		stones = p;
+		xPos = 300;
+		yPos = 300;
+		model = m;
 		
-		private int stones;
-		private double width;
-		private double height;
-		private int xPos;
-		private int yPos;
-		private int index;
-		private MancalaGameModel model;
-		private Style style;
-		public PitsView (int p, MancalaGameModel m){
-			super();
-			stones = p;
-			width = 1;
-			height = 1;
-			xPos = 300;
-			yPos = 300;
-			model = m;
-		      addMouseListener(new MouseAdapter() { 
-		          public void mousePressed(MouseEvent me) {
-		        	  if (model.getPit(getPitsIndex())==0)
-		        		  return;
-		        	  else if (model.nextPlayer()==1&&getPitsIndex()<6){
-		        	  model.makeMovement(getPitsIndex());
-		        	  model.printBoard();
-		        	 
-		        	  }
-		        	  else if (model.nextPlayer()==2&&getPitsIndex()>5){
-			        	  model.makeMovement(getPitsIndex());
-			        	  model.printBoard();
-			        	  }
-		        	  int winner = model.checkWin();
-		        	  if (winner!=0)
-		        	  {
-		        		  int firstStore = model.getFirstStore();
-		        		  int secondStore = model.getSecondStore();
-		        		  JOptionPane pane = new JOptionPane();
-		        		  int exit = pane.showConfirmDialog(null, "The winner is: "+((winner==1)?"A":"B")+"\nPlayer A has: "+firstStore+"\nPlayer B has: "+secondStore, "Game End!", JOptionPane.CLOSED_OPTION);
-		        		 
-		        		  
-		        		  if (exit != 10000)
-		        		    {
-		        		        System.exit(0);
-		        		    }
-		        		    
-		        	  }
-		          } 
-		        }); 
-		}
-		
-		public void setStyle(Style newStyle)
-		{
-			style = newStyle;
-		}
-		public void update(int s)
-		{
-			stones = s;
-			repaint();
-		}
-		public int getPitsIndex()
-		{
-			return index;
-		}
-		public void setIndex(int i)
-		{ 
-			index = i;
-		}
-		public void setXpos(int xP)
-		{
-			xPos = xP;
-		}
-		
-		public void setYpos(int yP)
-		{
-			yPos = yP;
-		}
-		
-		public int getXpos()
-		{
-			return xPos;
-		}
-		
-		public int getYpos()
-		{
-			return yPos;
-		}
-		
-		
-		public double getW()
-		{
-			return width;
-		}
-		public double getH()
-		{
-			return height;
-		}
-		
-		@Override
-        public Dimension getPreferredSize() {
-            return new Dimension(xPos, yPos);
-        }
-		
-		@Override
-		public void paintComponent(Graphics g)
-		{
-			super.paintComponent(g);
-			style.paintPits(g, xPos, yPos, stones);
-			/*Graphics2D g2 = (Graphics2D) g;
-			g2.setColor(Color.RED);
-			g2.fill(new Ellipse2D.Double(0,0, xPos, yPos));
-			g2.setColor(Color.BLUE);
-			
-				for (int i=0; i<stones&&i<3; i++)
-				{
-					g2.translate(xPos/5, 0);
-					g2.fill(new Ellipse2D.Double(0,yPos*1/5, 12, 12));
+		//add action listener when mouse is clicked in the pit
+		addMouseListener(new MouseAdapter() { 
+			public void mousePressed(MouseEvent me) {
+				
+				// if user click on an empty pit, do nothing
+				if (model.getPit(getPitsIndex())==0) 
+					return;
+				
+				// if it's player A's turn and user click Player A's pits, make movement
+				else if (model.nextPlayer()==1&&getPitsIndex()<6){
+					model.makeMovement(getPitsIndex());
 				}
-				g2.translate(-3*xPos/5,0);
-				for (int i=3; i<stones&&i<7; i++)
-				{
-					g2.translate(xPos/6, 0);
-					g2.fill(new Ellipse2D.Double(0,yPos*2/5, 12, 12));
+				
+				// if it's player B's turn and user click Player B's pits, make movement
+				else if (model.nextPlayer()==2&&getPitsIndex()>5){
+					model.makeMovement(getPitsIndex());
 				}
-				g2.translate(-4*xPos/6, 0);
-				for (int i=7; i<stones&&i<11;i++)
+				
+				//check every time after user make movement to see if the win condition has been reached
+				int winner = model.checkWin();
+				if (winner!=0)
 				{
-					g2.translate(xPos/6, 0);
-					g2.fill(new Ellipse2D.Double(0,yPos*3/5, 12, 12));
+					int firstStore = model.getFirstStore();
+					int secondStore = model.getSecondStore();
+					JOptionPane pane = new JOptionPane(); //pop up window to show who is the winner and win by how many stones
+					int exit = pane.showConfirmDialog(null, "The winner is: "+((winner==1)?"A":"B")+"\nPlayer A has: "+firstStore+"\nPlayer B has: "+secondStore, "Game End!", JOptionPane.CLOSED_OPTION);
+
+					//it will end the program after user close the pop up window
+					if (exit != 10000)
+					{
+						System.exit(0);
+					}
+
 				}
-				g2.translate(-4*xPos/6, 0);
-				for (int i=11; i<stones&&i<14;i++)
-				{
-					g2.translate(xPos/5, 0);
-					g2.fill(new Ellipse2D.Double(0,yPos*4/5, 12, 12));
-				}
-			*/
-			//g2.translate(10, 0);
-			//g2.draw(new Ellipse2D.Double(0,10, 10, 10));
-			//g2.translate(10, 0);
-			//g2.draw(new Ellipse2D.Double(3,10, 10, 10));
-			//g2.translate(10, 0);
-			//g2.draw(new Ellipse2D.Double(6,10, 10, 10));
-			
-		}
-		
+			} 
+		}); 
+	}
+
+	public void setStyle(Style newStyle)
+	{
+		style = newStyle;
+	}
+	// update method inherited from View interface, it updates the number of stones in pits and repaint
+	public void update(int s)
+	{
+		stones = s;
+		repaint();
+	}
+	public int getPitsIndex()
+	{
+		return index;
+	}
+	public void setIndex(int i)
+	{ 
+		index = i;
+	}
+	public void setXpos(int xP)
+	{
+		xPos = xP;
+	}
+
+	public void setYpos(int yP)
+	{
+		yPos = yP;
+	}
+
+	public int getXpos()
+	{
+		return xPos;
+	}
+
+	public int getYpos()
+	{
+		return yPos;
+	}
+
+
+
+
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(xPos, yPos);
+	}
+
+	@Override
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		style.paintPits(g, xPos, yPos, stones);
+
+
+	}
+
 }

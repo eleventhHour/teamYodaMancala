@@ -2,24 +2,23 @@ import java.util.ArrayList;
 
 public class MancalaGameModel {
 
-	PitsModel pits;
-	private boolean undoMove;
-	PitsModel savedPits;
-	private boolean [] previousExtraMovement;
-	private int stones;
-	private ArrayList<View> views;
-	private boolean eMove;
-	private int turns;
-	private int blockUndo;
-	private int count;
-
+	PitsModel pits; // it holds all the current pits and store information
+	PitsModel savedPits; // it holds all the previous pits and store information
+	private boolean [] previousExtraMovement; // it will indicate if the previous movement has extra turn
+	private int stones; // indicates how many stones in the pits
+	private ArrayList<View> views; // it hold all the views information, in our project, it has 12 PitsView and 2 StoreView
+	private boolean eMove;	//flag for extra movement
+	private int turns;	//indicates the total turns
+	private int blockUndo; //indicates if player click undo button in same turn
+	private int count;	//it counts how many times the undo button has been clicked, one player can only use undo method 3 times in one turn
+	
+	//the parameter is the initial stones in each pits
 	public MancalaGameModel(int n)
 	{
 		turns=-1;
 		eMove = false;
 		stones = n;
 		pits = new PitsModel(n);
-		undoMove = true;
 		savedPits = new PitsModel(n);
 		previousExtraMovement = new boolean[] {false, false};
 		views = new ArrayList<View>();
@@ -46,8 +45,7 @@ public class MancalaGameModel {
 		else
 			player = 2;
 		pits.setPlayer(player);
-		saveMovement(savedPits, pits);
-		System.out.println("Saved player: " + savedPits.getPlayer());
+		saveMovement(savedPits, pits); // save the previous movement
 		if(turns==0)
 			savedPits.setPlayer(0);
 		pits.setExtraMove(false);
@@ -58,14 +56,14 @@ public class MancalaGameModel {
 		while(temp >0)
 		{
 
-			if (index==5 && temp>0 && player==1)
+			if (index==5 && temp>0 && player==1)	//check if the stone need to be added in store
 			{
 				pits.addFirstStore(1);
 				temp--;
 				if (temp==0 && player==1)
 					setExtraMovement(true);
 			}
-			else if (index==11 && temp >0 && player==2)
+			else if (index==11 && temp >0 && player==2) //check if the stone need to be added in store
 			{
 				pits.addSecondStore(1);
 				temp--;
@@ -85,7 +83,7 @@ public class MancalaGameModel {
 
 		}
 
-		if (pits.getPits(index)==1)
+		if (pits.getPits(index)==1) //if the last stone lands in empty pit, take all the stones in opposite pit, and move them to store
 		{
 			if (index<=5 && player == 1)
 			{
@@ -103,12 +101,16 @@ public class MancalaGameModel {
 			}
 		}
 
+		//save the extra movement information for savedPits.
 		recordExtraMovement();
 		eMove = getExtraMovement();
+		
+		//it calls update method to update all the views
 		update();
 
 	}
-
+	
+	
 	public void recordExtraMovement()
 	{
 		previousExtraMovement[0] = previousExtraMovement[1];
@@ -121,12 +123,12 @@ public class MancalaGameModel {
 		return e;
 	}
 
-
-
 	public void setExtraMovement(boolean m)
 	{
 		pits.setExtraMove(m);
 	}
+	
+	//print the board in console
 	public void printBoard()
 	{
 		System.out.print("\n     ");
@@ -144,22 +146,7 @@ public class MancalaGameModel {
 		System.out.println("  " + pits.getFirstStore() + "  ");
 	}
 
-	public void printSavedBoard()
-	{
-		System.out.print("\n     ");
-		for(int i=11; i>5;i--)
-		{
-			System.out.print(savedPits.getPits(i) + " ");
-
-		}
-		System.out.println("     ");
-		System.out.print("  " + savedPits.getSecondStore() + "  ");
-		for(int i=0; i<6; i++)
-		{
-			System.out.print(savedPits.getPits(i) + " ");
-		}
-		System.out.println("  " + savedPits.getFirstStore() + "  ");
-	}
+	//check if any player has win the game
 	public int checkWin()
 	{
 		int winner = 0;
@@ -206,6 +193,8 @@ public class MancalaGameModel {
 		return winner;
 	}
 
+	
+	//undo the movement
 	public void undo()
 	{
 		if (blockUndo==turns){
@@ -216,12 +205,10 @@ public class MancalaGameModel {
 			blockUndo = turns;
 			count = 0;
 		}
+		//only can undo 3 times
 		if (count<3){
 			turns--;
-			saveMovement(pits, savedPits);
-
-
-			System.out.println("Player: "+pits.getPlayer());
+			saveMovement(pits, savedPits); // get the saved pits information and load it to current pits
 			pits.setExtraMove(previousExtraMovement[0]); 
 			previousExtraMovement[1] = previousExtraMovement[0];
 			previousExtraMovement[0] = false;
@@ -234,12 +221,10 @@ public class MancalaGameModel {
 		}
 	}
 
+	
+	
 	public void saveMovement(PitsModel p, PitsModel s)
 	{
-		/*p.pits = s.pits;
-		p.firstStore = s.firstStore;
-		p.secondStore = s.secondStore;*/
-
 		for (int i=0; i<p.pits.length;i++)
 		{
 			p.pits[i] = s.pits[i];
@@ -250,6 +235,7 @@ public class MancalaGameModel {
 		p.move = s.move;
 	}
 
+	//get which player's turn is next
 	public int nextPlayer()
 	{
 
@@ -267,11 +253,15 @@ public class MancalaGameModel {
 		return 0;
 
 	}
+	
+	//add the view
 	public void addView(View v)
 	{
 		views.add(v);
 	}
 
+	
+	//update all the views based on the model 
 	public void update()
 	{
 		for (int i=0; i<12;i++)
@@ -281,6 +271,8 @@ public class MancalaGameModel {
 		views.get(12).update(pits.getFirstStore());
 		views.get(13).update(pits.getSecondStore());
 	}
+	
+	
 	public int getFirstStore()
 	{
 		return pits.getFirstStore();

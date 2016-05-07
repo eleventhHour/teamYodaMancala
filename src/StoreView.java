@@ -1,131 +1,90 @@
-import java.awt.Color;
+/**
+ * Mancala : StoreView
+ * @author Peter Yulong Chen, Paul Diaz, Branden Anderson, Brandon Trinh
+ */
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
-
 import javax.swing.*;
 
+/**
+ * Class the represents the stores view
+ * extends JComponent and implements interface View
+ */
 public class StoreView extends JComponent implements View{
-	private int xPos;
-	private int yPos;
-	private int index;
-	private int stones;
-	private Style style;
-	private MancalaGameModel model;
-	
-	public StoreView(MancalaGameModel m)
-	{
-		model = m;
-		xPos = 500;
-		yPos = 400;
-		stones = 0;
-	}
-	
-	public void setStyle(Style newStyle)
-	{
-		style = newStyle;
-	}
-	public void setXpos(int xP)
-	{
-		xPos = xP;
-	}
-	
-	public void setYpos(int yP)
-	{
-		yPos = yP;
-	}
-	
-	public int getXpos()
-	{
-		return xPos;
-	}
-	
-	public int getYpos()
-	{
-		return yPos;
-	}
-	
-	@Override
-	public void update(int i) {
-		// TODO Auto-generated method stub
-		stones = i;
-		repaint();
-	}
-	
-	@Override
+    private int xPos;
+    private int yPos;
+    private int stones;
+    private Style style;
+    private MancalaGameModel model;
+    /**
+     * Constructor for StoreView
+     * @param m is the model (MVC) for the game
+     */
+    public StoreView(MancalaGameModel m){
+	model = m;
+	xPos = 500;
+	yPos = 400;
+	stones = 0;
+    }
+    /**
+     * Method that sets the style chosen by the player
+     * @param newStyle is the style chosen for the game
+     */
+    public void setStyle(Style newStyle){
+	style = newStyle;
+    }
+    /**
+     * Method that sets the position of xP
+     * @param xP is the of xPos in x direction
+     */
+    public void setXpos(int xP){
+	xPos = xP;
+    }
+    /**
+     * Method that sets the position of yP
+     * @param yP is the of yPos in y direction
+     */
+    public void setYpos(int yP){
+	yPos = yP;
+    }
+    /**
+     * Method that returns the position of xPos
+     * @return the position of xPos
+     */
+    public int getXpos(){
+	return xPos;
+    }
+    /**
+     * Method that returns the position of yPos
+     * @return the position of yPos
+     */
+    public int getYpos(){
+	return yPos;
+    }
+    /**
+     * Method that updates the view of store
+     * @param i is the number of stones in the store
+     */
+    @Override
+    public void update(int i) {
+	stones = i;
+	repaint();
+    }
+    /**
+     * Method that returns the dimension of a store
+     * @return the dimension of the store
+     */
+    @Override
     public Dimension getPreferredSize() {
         return new Dimension(xPos, yPos);
     }
-	
-	@Override
-	public void paintComponent(Graphics g)
-	{
-		 super.paintComponent(g);
-		style.paintMancala(g, xPos, yPos, stones);
-		/*Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.LIGHT_GRAY);
-		g2.fill(new Ellipse2D.Double(0,yPos/8, xPos, yPos));
-		g2.setColor(Color.BLUE);
-		
-		g2.translate(xPos/3, 0);
-		for (int i=0; i<stones&&i<3; i++)
-		{
-			g2.fill(new Ellipse2D.Double(0,yPos*1/5, 12, 12));
-			g2.translate(xPos/7, 0);
-		}
-		g2.translate(-xPos/3-3*xPos/7,0);
-		
-		
-		g2.translate(xPos/20, 0);
-		for (int i=3; i<stones&&i<8; i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*3/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		
-		for (int i=8; i<stones&&i<13;i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*4/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		
-		for (int i=13; i<stones&&i<18;i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*5/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		
-		for (int i=18; i<stones&&i<23;i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*6/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		
-		for (int i=23; i<stones&&i<28;i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*7/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		for (int i=28; i<stones&&i<33;i++)
-		{
-			g2.translate(xPos/7, 0);
-			g2.fill(new Ellipse2D.Double(0,yPos*8/10, 12, 12));
-		}
-		g2.translate(-5*xPos/7, 0);
-		g2.translate(xPos/3, 0);
-		for (int i=33; i<stones&&i<36; i++)
-		{
-			
-			g2.fill(new Ellipse2D.Double(0,yPos*9/10, 12, 12));
-			g2.translate(xPos/7, 0);
-			
-		}*/
-	}
-
+    /**
+     * Method that paints the the store: done by whichever style the player has chosen
+     * @param g is the graphics responsible for painting the store
+     */
+    @Override
+    public void paintComponent(Graphics g){
+	super.paintComponent(g);
+	style.paintMancala(g, xPos, yPos, stones);	
+    }
 }

@@ -1,8 +1,10 @@
+/**
+ * Mancala : Style - interface
+ * Interface for Strategy Pattern (choosing style)
+ * @author Peter Yulong Chen, Paul Diaz, Branden Anderson, Brandon Trinh
+ */
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.*;
 
-//Strategy interface
 public interface Style {
     void paintPits(Graphics g, int xPos, int yPos, int stones);
     void paintMancala(Graphics g, int xPos, int yPos, int stones);
